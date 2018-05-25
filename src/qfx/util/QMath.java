@@ -14,7 +14,7 @@ public class QMath extends QComponent {
     }
 
     public static int random(int min, int max) {
-        return _rnd.nextInt(max) + min;
+        return _rnd.nextInt(max) % (max - min + 1) + min;
     }
 
     public static double max(double a, double b) {
