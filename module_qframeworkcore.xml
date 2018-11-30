@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_qframeworkcore" default="compile.module.qframeworkcore">
+  <dirname property="module.qframeworkcore.basedir" file="${ant.file.module_qframeworkcore}"/>
+  
+  <property name="module.jdk.home.qframeworkcore" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.qframeworkcore" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.qframeworkcore" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.qframeworkcore" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="qframeworkcore.output.dir" value="${module.qframeworkcore.basedir}/../../1/school-java-course/out/production/QFrameworkCore"/>
+  <property name="qframeworkcore.testoutput.dir" value="${module.qframeworkcore.basedir}/../../1/school-java-course/out/test/QFrameworkCore"/>
+  
+  <path id="qframeworkcore.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="qframeworkcore.module.production.classpath">
+    <path refid="${module.jdk.classpath.qframeworkcore}"/>
+  </path>
+  
+  <path id="qframeworkcore.runtime.production.module.classpath">
+    <pathelement location="${qframeworkcore.output.dir}"/>
+  </path>
+  
+  <path id="qframeworkcore.module.classpath">
+    <path refid="${module.jdk.classpath.qframeworkcore}"/>
+    <pathelement location="${qframeworkcore.output.dir}"/>
+  </path>
+  
+  <path id="qframeworkcore.runtime.module.classpath">
+    <pathelement location="${qframeworkcore.testoutput.dir}"/>
+    <pathelement location="${qframeworkcore.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.qframeworkcore">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.qframeworkcore">
+    <patternset refid="excluded.from.module.qframeworkcore"/>
+  </patternset>
+  
+  <path id="qframeworkcore.module.sourcepath">
+    <dirset dir="${module.qframeworkcore.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.qframeworkcore" depends="compile.module.qframeworkcore.production,compile.module.qframeworkcore.tests" description="Compile module QFrameworkCore"/>
+  
+  <target name="compile.module.qframeworkcore.production" depends="register.custom.compilers" description="Compile module QFrameworkCore; production classes">
+    <mkdir dir="${qframeworkcore.output.dir}"/>
+    <javac2 destdir="${qframeworkcore.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.qframeworkcore}/javac">
+      <compilerarg line="${compiler.args.qframeworkcore}"/>
+      <bootclasspath refid="qframeworkcore.module.bootclasspath"/>
+      <classpath refid="qframeworkcore.module.production.classpath"/>
+      <src refid="qframeworkcore.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.qframeworkcore"/>
+    </javac2>
+    
+    <copy todir="${qframeworkcore.output.dir}">
+      <fileset dir="${module.qframeworkcore.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.qframeworkcore.tests" depends="register.custom.compilers,compile.module.qframeworkcore.production" description="compile module QFrameworkCore; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.qframeworkcore" description="cleanup module">
+    <delete dir="${qframeworkcore.output.dir}"/>
+    <delete dir="${qframeworkcore.testoutput.dir}"/>
+  </target>
+</project>
